@@ -13,7 +13,7 @@ import { edit } from '@/routes/security';
 
 type Props = {
     passwordRules: string;
-    twoFactorStatus: TwoFactorStatus;
+    twoFactorStatus: TwoFactorStatus | null;
 };
 
 export default function Security({ passwordRules, twoFactorStatus }: Props) {
@@ -118,7 +118,9 @@ export default function Security({ passwordRules, twoFactorStatus }: Props) {
                     )}
                 </Form>
 
-                <TwoFactorSettings initialStatus={twoFactorStatus} />
+                {twoFactorStatus !== null && (
+                    <TwoFactorSettings initialStatus={twoFactorStatus} />
+                )}
             </div>
         </>
     );
