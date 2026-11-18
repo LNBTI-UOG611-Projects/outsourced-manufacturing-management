@@ -12,23 +12,29 @@ export default function VerifyEmail({ status }: { status?: string }) {
             <Head title="Email verification" />
 
             {status === 'verification-link-sent' && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <div
+                    role="status"
+                    className="mb-5 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-center text-sm leading-relaxed font-medium text-blue-800"
+                >
                     A new verification link has been sent to the email address
                     you provided during registration.
                 </div>
             )}
 
-            <Form {...send.form()} className="space-y-6 text-center">
+            <Form {...send.form()} className="space-y-4 text-center">
                 {({ processing }) => (
                     <>
-                        <Button disabled={processing} variant="secondary">
+                        <Button
+                            disabled={processing}
+                            className="h-12 w-full rounded-xl bg-blue-600 text-base font-semibold text-white shadow-sm shadow-blue-600/20 transition-colors hover:bg-blue-700 focus-visible:ring-4 focus-visible:ring-blue-600/25 active:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-70"
+                        >
                             {processing && <Spinner />}
                             Resend verification email
                         </Button>
 
                         <TextLink
                             href={logout()}
-                            className="mx-auto block text-sm"
+                            className="mx-auto inline-flex min-h-11 items-center justify-center rounded px-2 text-sm font-medium text-red-600 no-underline transition-colors hover:text-red-700 hover:no-underline focus-visible:ring-4 focus-visible:ring-red-600/15 focus-visible:outline-none"
                         >
                             Log out
                         </TextLink>

@@ -15,30 +15,29 @@ test('security page is displayed', function () {
 
     $user = User::factory()->create();
 
-    $this->actingAs($user)
+    $this
+        ->actingAs($user)
         ->get(route('security.edit'))
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('settings/security')
-            ->where('canManageTwoFactor', true)
-            ->where('twoFactorEnabled', false),
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('settings/security')
+                ->where('twoFactorStatus', 'disabled'),
         );
 });
 
 test('security page renders without two factor when feature is disabled', function () {
-    $this->skipUnlessFortifyHas(Features::twoFactorAuthentication());
-
     config(['fortify.features' => []]);
 
     $user = User::factory()->create();
 
-    $this->actingAs($user)
+    $this
+        ->actingAs($user)
         ->get(route('security.edit'))
         ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('settings/security')
-            ->where('canManageTwoFactor', false)
-            ->missing('twoFactorEnabled')
-            ->missing('requiresConfirmation'),
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('settings/security')
+                ->where('twoFactorStatus', null),
         );
 });
 
@@ -58,7 +57,7 @@ test('password can be updated', function () {
         ->assertSessionHasNoErrors()
         ->assertRedirect(route('security.edit'));
 
-    expect(Hash::check('new-password', $user->refresh()->password))->toBeTrue();
+    expect(Hash::check('new-password', $user->refresh()->getAuthPassword()))->toBeTrue();
 });
 
 test('correct password must be provided to update password', function () {
