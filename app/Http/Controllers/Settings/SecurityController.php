@@ -17,11 +17,16 @@ class SecurityController extends Controller
      */
     public function edit(TwoFactorAuthenticationRequest $request): Response
     {
-        $props = [
-            'passwordRules' => Password::defaults()->toPasswordRulesString(),
-        ];
+        $user = $request->user();
 
-        return Inertia::render('settings/security', $props);
+        return Inertia::render('settings/security', [
+            'passwordRules' => Password::defaults()->toPasswordRulesString(),
+            'twoFactorStatus' => match (true) {
+                filled($user->two_factor_confirmed_at) => 'enabled',
+                filled($user->two_factor_secret) => 'pending',
+                default => 'disabled',
+            },
+        ]);
     }
 
     /**
@@ -30,10 +35,13 @@ class SecurityController extends Controller
     public function update(PasswordUpdateRequest $request): RedirectResponse
     {
         $request->user()->update([
-            'password' => $request->password,
+            'password_hash' => $request->validated('password'),
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Password updated.')]);
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('Password updated.'),
+        ]);
 
         return back();
     }

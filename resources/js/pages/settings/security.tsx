@@ -4,16 +4,22 @@ import SecurityController from '@/actions/App/Http/Controllers/Settings/Security
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
+import TwoFactorSettings, {
+    type TwoFactorStatus,
+} from '@/components/two-factor-settings';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { edit } from '@/routes/security';
 
-// oxfmt-ignore
 type Props = {
     passwordRules: string;
+    twoFactorStatus: TwoFactorStatus;
 };
 
-export default function Security(props: Props) {
+export default function Security({
+    passwordRules,
+    twoFactorStatus,
+}: Props) {
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
 
@@ -32,9 +38,7 @@ export default function Security(props: Props) {
 
                 <Form
                     {...SecurityController.update.form()}
-                    options={{
-                        preserveScroll: true,
-                    }}
+                    options={{ preserveScroll: true }}
                     resetOnError={[
                         'password',
                         'password_confirmation',
@@ -42,12 +46,10 @@ export default function Security(props: Props) {
                     ]}
                     resetOnSuccess
                     onError={(errors) => {
-                        if (errors.password) {
-                            passwordInput.current?.focus();
-                        }
-
                         if (errors.current_password) {
                             currentPasswordInput.current?.focus();
+                        } else if (errors.password) {
+                            passwordInput.current?.focus();
                         }
                     }}
                     className="space-y-6"
@@ -81,7 +83,7 @@ export default function Security(props: Props) {
                                     className="mt-1 block w-full"
                                     autoComplete="new-password"
                                     placeholder="New password"
-                                    passwordrules={props.passwordRules}
+                                    passwordrules={passwordRules}
                                 />
 
                                 <InputError message={errors.password} />
@@ -98,7 +100,7 @@ export default function Security(props: Props) {
                                     className="mt-1 block w-full"
                                     autoComplete="new-password"
                                     placeholder="Confirm password"
-                                    passwordrules={props.passwordRules}
+                                    passwordrules={passwordRules}
                                 />
 
                                 <InputError
@@ -108,6 +110,7 @@ export default function Security(props: Props) {
 
                             <div className="flex items-center gap-4">
                                 <Button
+                                    type="submit"
                                     disabled={processing}
                                     data-test="update-password-button"
                                 >
@@ -117,6 +120,8 @@ export default function Security(props: Props) {
                         </>
                     )}
                 </Form>
+
+                <TwoFactorSettings initialStatus={twoFactorStatus} />
             </div>
         </>
     );
