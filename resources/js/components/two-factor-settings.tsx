@@ -63,7 +63,7 @@ async function fortifyRequest(
 
         throw new Error(
             result.errors?.code?.[0] ??
-            'Check the authenticator code and try again.',
+                'Check the authenticator code and try again.',
         );
     }
 
@@ -106,7 +106,9 @@ export default function TwoFactorSettings({ initialStatus }: Props) {
         const result: { svg?: string } = await response.json();
 
         if (!result.svg) {
-            throw new Error('Could not load the QR code. Refresh and try again.');
+            throw new Error(
+                'Could not load the QR code. Refresh and try again.',
+            );
         }
 
         setQrSvg(result.svg);
@@ -160,8 +162,8 @@ export default function TwoFactorSettings({ initialStatus }: Props) {
                 {status === 'enabled'
                     ? 'Enabled'
                     : status === 'pending'
-                        ? 'Setup incomplete'
-                        : 'Disabled'}
+                      ? 'Setup incomplete'
+                      : 'Disabled'}
             </p>
 
             {error && (

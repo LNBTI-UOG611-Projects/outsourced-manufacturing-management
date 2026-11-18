@@ -65,10 +65,11 @@ export default function TwoFactorChallenge() {
                         aria-describedby={
                             error ? 'two-factor-code-error' : undefined
                         }
-                        className={`h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 transition-colors outline-none placeholder:text-slate-400 hover:border-slate-300 focus-visible:border-blue-600 focus-visible:bg-white focus-visible:ring-4 focus-visible:ring-blue-600/15 aria-invalid:border-red-500 aria-invalid:ring-4 aria-invalid:ring-red-500/15 ${usingRecoveryCode
+                        className={`h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 transition-colors outline-none placeholder:text-slate-400 hover:border-slate-300 focus-visible:border-blue-600 focus-visible:bg-white focus-visible:ring-4 focus-visible:ring-blue-600/15 aria-invalid:border-red-500 aria-invalid:ring-4 aria-invalid:ring-red-500/15 ${
+                            usingRecoveryCode
                                 ? ''
                                 : 'text-center text-xl font-medium tracking-[0.4em]'
-                            }`}
+                        }`}
                         required
                     />
 

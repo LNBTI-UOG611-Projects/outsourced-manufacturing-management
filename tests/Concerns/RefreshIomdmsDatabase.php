@@ -15,7 +15,7 @@ trait RefreshIomdmsDatabase
         $connection = DB::connection();
 
         if (
-            !app()->environment('testing') ||
+            ! app()->environment('testing') ||
             $connection->getDriverName() !== 'pgsql' ||
             $connection->getDatabaseName() !== 'iomdms_test'
         ) {

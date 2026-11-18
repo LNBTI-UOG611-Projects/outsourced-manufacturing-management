@@ -58,7 +58,7 @@ class FortifyServiceProvider extends ServiceProvider
                 ->where('account_status', 'active')
                 ->first();
 
-            if ($user === null || !Hash::check($password, $user->getAuthPassword())) {
+            if ($user === null || ! Hash::check($password, $user->getAuthPassword())) {
                 return null;
             }
 
@@ -71,31 +71,31 @@ class FortifyServiceProvider extends ServiceProvider
      */
     private function configureViews(): void
     {
-        Fortify::loginView(fn(Request $request) => Inertia::render('auth/login', [
+        Fortify::loginView(fn (Request $request) => Inertia::render('auth/login', [
             'canResetPassword' => Features::enabled(Features::resetPasswords()),
             'status' => $request->session()->get('status'),
         ]));
 
-        Fortify::resetPasswordView(fn(Request $request) => Inertia::render('auth/reset-password', [
+        Fortify::resetPasswordView(fn (Request $request) => Inertia::render('auth/reset-password', [
             'email' => $request->email,
             'token' => $request->route('token'),
             'passwordRules' => Password::defaults()->toPasswordRulesString(),
         ]));
 
-        Fortify::requestPasswordResetLinkView(fn(Request $request) => Inertia::render('auth/forgot-password', [
+        Fortify::requestPasswordResetLinkView(fn (Request $request) => Inertia::render('auth/forgot-password', [
             'status' => $request->session()->get('status'),
         ]));
 
-        Fortify::verifyEmailView(fn(Request $request) => Inertia::render('auth/verify-email', [
+        Fortify::verifyEmailView(fn (Request $request) => Inertia::render('auth/verify-email', [
             'status' => $request->session()->get('status'),
         ]));
 
         Fortify::confirmPasswordView(
-            fn() => Inertia::render('auth/confirm-password')
+            fn () => Inertia::render('auth/confirm-password')
         );
 
         Fortify::twoFactorChallengeView(
-            fn() => Inertia::render('auth/two-factor-challenge')
+            fn () => Inertia::render('auth/two-factor-challenge')
         );
     }
 
@@ -106,7 +106,7 @@ class FortifyServiceProvider extends ServiceProvider
     {
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(
-                Str::lower((string) $request->input(Fortify::username())) . '|' . $request->ip()
+                Str::lower((string) $request->input(Fortify::username())).'|'.$request->ip()
             );
 
             return Limit::perMinute(5)->by($throttleKey);

@@ -16,10 +16,7 @@ type Props = {
     twoFactorStatus: TwoFactorStatus;
 };
 
-export default function Security({
-    passwordRules,
-    twoFactorStatus,
-}: Props) {
+export default function Security({ passwordRules, twoFactorStatus }: Props) {
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
 
