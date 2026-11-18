@@ -33,16 +33,18 @@ async function fortifyRequest(
         }
     }
 
-    if (body) {
-        headers.set('Content-Type', 'application/json');
-    }
-
-    const response = await fetch(path, {
+    const options: RequestInit = {
         method,
         headers,
         credentials: 'same-origin',
-        body: body ? JSON.stringify(body) : undefined,
-    });
+    };
+
+    if (method !== 'GET' && body !== undefined) {
+        headers.set('Content-Type', 'application/json');
+        options.body = JSON.stringify(body);
+    }
+
+    const response = await fetch(path, options);
 
     if (response.status === 423) {
         throw new Error(
